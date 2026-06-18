@@ -548,11 +548,11 @@ const SIZE_FRAME = [
 ];
 /* map markers - base grid 201×97 (matches the site's GeoMap) */
 const GEO = [
-  { id: "usa",   x: 22.5, y: 40.0, lx: 22.9, ly: 9,  side: "top",    live: false, label: "USA" },
-  { id: "eu",    x: 51.7, y: 24.7, lx: 51.7, ly: 7,  side: "top",    live: false, label: "EU" },
-  { id: "mena",  x: 64.5, y: 46.0, lx: 66,   ly: 12, side: "top",    live: true,  label: "UAE / MENA" },
-  { id: "sea",   x: 79.1, y: 58.8, lx: 80,   ly: 87, side: "bottom", live: true,  label: "SE Asia" },
-  { id: "latam", x: 31.8, y: 63.9, lx: 30,   ly: 88, side: "bottom", live: true,  label: "LATAM" },
+  { id: "usa",   x: 17.5, y: 33.0, lx: 17.5, ly: 7,  side: "top",    live: false, label: "USA" },
+  { id: "eu",    x: 50.0, y: 28.0, lx: 50.0, ly: 7,  side: "top",    live: false, label: "EU" },
+  { id: "mena",  x: 63.0, y: 33.0, lx: 66.0, ly: 7,  side: "top",    live: true,  label: "UAE / MENA" },
+  { id: "sea",   x: 82.0, y: 58.0, lx: 82.0, ly: 92, side: "bottom", live: true,  label: "SE Asia" },
+  { id: "latam", x: 28.0, y: 62.0, lx: 32.0, ly: 92, side: "bottom", live: true,  label: "LATAM" },
 ];
 
 /* ---------------- shared bits ---------------- */
@@ -595,15 +595,17 @@ function Marker({ x, y, live, delay, label, pos, showLabel }) {
 }
 /* the world map + pins.
    - `callouts` overlays region stat cards (variant A)
-   - `inline` puts a single pulsing marker on the map with label inline (Olsamo variant)
-   - default leader-line + off-map label (variants B/C) */
+   - `inline` keeps the pulsing pin ON the country with a dashed leader line
+     to a floating label (Olsamo variant)
+   - default leader-line + off-map pulsing dot (variants B/C) */
 function GeoMap({ maxWidth = 1180, callouts = false, showLabels = true, inline = false }) {
   const leader = !inline && showLabels && !callouts;
+  const showLines = leader || inline;
   return (
     <div className="geo-map" style={{ position: "relative", width: "100%", maxWidth, margin: "0 auto" }}>
       <img src="assets/world-map-dots-sm.svg" alt="World map - Karta active regions" draggable={false}
         style={{ display: "block", width: "100%", height: "auto", filter: "saturate(0) brightness(1.05)", opacity: 0.82 }} />
-      {leader && (
+      {showLines && (
         <svg viewBox="0 0 100 100" preserveAspectRatio="none" style={{ position: "absolute", inset: 0, width: "100%", height: "100%", pointerEvents: "none", overflow: "visible" }}>
           {GEO.map((m) => (
             <line key={m.id} x1={m.x} y1={m.y} x2={m.lx} y2={m.ly} stroke={m.live ? ACID : ROAD} strokeWidth="1" strokeDasharray="2.5 2.5" vectorEffect="non-scaling-stroke" opacity=".55" />
@@ -614,7 +616,12 @@ function GeoMap({ maxWidth = 1180, callouts = false, showLabels = true, inline =
         {leader
           ? GEO.map((m, i) => <React.Fragment key={m.id}><OriginDot x={m.x} y={m.y} live={m.live} /><LeaderDot {...m} delay={i * 0.3} /></React.Fragment>)
           : inline
-            ? GEO.map((m, i) => <Marker key={m.id} {...m} pos={m.side} delay={i * 0.3} showLabel={true} />)
+            ? GEO.map((m, i) => (
+                <React.Fragment key={m.id}>
+                  <Marker x={m.x} y={m.y} live={m.live} delay={i * 0.3} label={m.label} showLabel={false} />
+                  <span style={{ position: "absolute", left: m.lx + "%", top: m.ly + "%", transform: "translate(-50%, -50%)", fontFamily: FD, fontWeight: 700, fontStretch: "125%", fontVariationSettings: "'wght' 700,'wdth' 125", fontSize: "clamp(12px,1vw,17px)", letterSpacing: "-.01em", color: FG, textShadow: "0 1px 6px rgba(0,0,0,.85),0 0 2px rgba(0,0,0,.9)", pointerEvents: "none", whiteSpace: "nowrap" }}>{m.label}</span>
+                </React.Fragment>
+              ))
             : GEO.map((m, i) => <Marker key={m.id} {...m} delay={i * 0.3} showLabel={false} />)}
         {callouts && (
           <React.Fragment>
@@ -1038,11 +1045,6 @@ function MarketRedesign() {
             {/* bar chart */}
             <Reveal variant="scale">
               <div style={{ display: "flex", flexDirection: "column", gap: 22 }}>
-                {/* shared year stamp — both numbers measured in 2025 */}
-                <div style={{ display: "flex", alignItems: "baseline", justifyContent: "space-between", gap: 14, borderTop: "1px solid var(--pp-line)", paddingTop: 14 }}>
-                  <span style={{ fontFamily: FD, fontWeight: 600, fontSize: 11, letterSpacing: ".22em", textTransform: "uppercase", color: FG4 }}>As of</span>
-                  <span className="pp-stat" style={{ fontSize: "clamp(40px, 5.6vw, 84px)", lineHeight: .9, color: ACID, fontStretch: "125%", letterSpacing: "-.035em", fontVariantNumeric: "tabular-nums" }}>2025</span>
-                </div>
                 {/* stablecoins bar — full width */}
                 <div style={{ display: "grid", gridTemplateColumns: "minmax(0, 1fr) auto", gap: 14, alignItems: "center" }}>
                   <div style={{ display: "flex", flexDirection: "column", gap: 10, minWidth: 0 }}>
