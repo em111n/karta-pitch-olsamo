@@ -484,22 +484,16 @@ function Close() {
           </h2>
         </Reveal>
         <Reveal delay={0.1}>
-          <div style={{ display: "flex", gap: 40, flexWrap: "wrap", justifyContent: "space-between", alignItems: "flex-end" }}>
-            <div style={{ display: "flex", flexDirection: "column", gap: 18 }}>
-              <span className="pp-h3" style={{ fontSize: 22 }}>Let's build it.</span>
-              <div style={{ display: "flex", gap: 12, flexWrap: "wrap" }}>
-                <PillButton href="#" onClick={(e) => e.preventDefault()} variant="accent" glyph="arrow">Request data room</PillButton>
-                <PillButton href="#" onClick={(e) => e.preventDefault()} glyph="check">[ Nik · email ]</PillButton>
-              </div>
+          <div style={{ display: "flex", gap: "clamp(20px, 3vw, 40px)", flexWrap: "wrap", justifyContent: "space-between", alignItems: "flex-end", borderTop: "1px solid var(--pp-line)", paddingTop: "clamp(28px, 3vw, 40px)" }}>
+            <div style={{ display: "flex", flexDirection: "column", gap: 8 }}>
+              <span style={{ fontFamily: "var(--pp-font-display)", fontWeight: 600, fontSize: 11, letterSpacing: ".22em", textTransform: "uppercase", color: "var(--pp-fg-4)" }}>Contact</span>
+              <span style={{ fontFamily: "var(--pp-font-display)", fontWeight: 600, fontStretch: "125%", fontSize: "clamp(20px, 2.4vw, 28px)", color: "var(--pp-acid)", letterSpacing: "-.01em" }}>Jana Olsamo</span>
+              <a href="mailto:olsamo@karta.io" className="inl-link" style={{ fontFamily: "var(--pp-font-body)", fontSize: 16, color: "var(--pp-fg-2)", letterSpacing: "-.005em" }}>olsamo@karta.io</a>
             </div>
-            <div style={{ display: "flex", flexDirection: "column", gap: 10 }}>
-              <p className="pp-body" style={{ margin: 0 }}>Follow Karta</p>
-              <div style={{ display: "flex", gap: 8 }}><Social k="in" /><Social k="x" /><Social k="tg" /></div>
-            </div>
+            <img src="assets/karta-logo-white.svg" alt="Karta" style={{ height: 34, opacity: .9 }} />
           </div>
         </Reveal>
-        <img src="assets/karta-logo-white.svg" alt="Karta" style={{ height: 34, opacity: .9, marginTop: 10 }} />
-        <p className="pp-caption" style={{ margin: 0, color: "var(--pp-fg-4)" }}>Seed round · 2026 · Figures April 2026 (Manifest Beautiful Table, Mixpanel). [ FILL ] = pending input.</p>
+        <p className="pp-caption" style={{ margin: 0, color: "var(--pp-fg-4)" }}>Figures April 2026 (Manifest Beautiful Table, Mixpanel).</p>
       </div>
     </footer>
   );
